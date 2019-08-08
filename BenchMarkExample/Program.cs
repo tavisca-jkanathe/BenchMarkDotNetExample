@@ -5,6 +5,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using System.Text;
 
 namespace benchmark
 {
@@ -22,70 +23,61 @@ namespace benchmark
     [RPlotExporter, RankColumn]
     public class Test
     {
+        private static Random random = new Random();
+        private List<String> hugeList ;
+        private List<int> list;
+
+        
+        public static String FormAWord(int length)
+        {
+            String output ="";
+            for(int i=0;i<length;i++)
+            {
+                output += "a";
+            }
+            return null;
+        }
+
+        public static List<String> RandomIntList(int length)
+        {
+            int Min = 1;
+            int Max = 10;
+            return Enumerable
+                .Repeat(0, length)
+                .Select(i => FormAWord(random.Next(Min, Max)))
+                .ToList();
+        }
         [Params(10, 100)]
         public int N;
 
-
-        static bool IsValidIf(int i)
+        [GlobalSetup]
+        public void Setup()
         {
-            // Uses if-expressions to implement selection statement.
-            if (i == 0 ||
-                i == 1)
-            {
-                return true;
-            }
-            if (i == 2 ||
-                i == 3)
-            {
-                return false;
-            }
-            if (i == 4 ||
-                i == 5)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        static bool IsValidSwitch(int i)
-        {
-            // Implements a selection statement with a switch.
-            switch (i)
-            {
-                case 0:
-                case 1:
-                    return true;
-                case 2:
-                case 3:
-                    return false;
-                case 4:
-                case 5:
-                    return true;
-                default:
-                    return false;
-            }
+            hugeList = RandomIntList(N);
         }
 
         const int _max = 100000000;
         [Benchmark]
-        public void If()
+        public void StringConcatenation()
         {
-            bool b;
-            for (int i = 0; i < _max; i++)
+            String concatResult = "";
+            foreach (String value in hugeList)
             {
-                b = IsValidIf(i);
+                concatResult += value;
             }
 
         }
         [Benchmark]
-        public void Switch()
+        public void StringBuiderConcatenation()
         {
-            bool b;
-
-            for (int i = 0; i < _max; i++)
+            StringBuilder stringBuilder = new StringBuilder();
+            String stringBuilderResult = "";
+            foreach (String s in hugeList)
             {
-                b = IsValidSwitch(i);
+                stringBuilder.Append(s);
             }
+
+            stringBuilderResult = stringBuilder.ToString();
         }
 
 

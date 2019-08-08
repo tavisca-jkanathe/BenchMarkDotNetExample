@@ -22,73 +22,93 @@ namespace benchmark
     [RPlotExporter, RankColumn]
     public class Test
     {
-        private static Random random = new Random();
-        private List<int> list;
-      
-        int[] myArray;
-        Dictionary<int, int> myDictionary;
-        List<int> mylist;
-
-
-
-        public static List<int> RandomIntList(int length)
-        {
-            int Min = 1;
-            int Max = 10;
-            return Enumerable
-                .Repeat(0, length)
-                .Select(i => random.Next(Min, Max))
-                .ToList();
-        }
-
-        [Params(10,100)]
+        [Params(10, 100)]
         public int N;
 
-        [GlobalSetup]
-        public void Setup()
+
+        static bool IsValidIf(int i)
         {
-            list = RandomIntList(N);
+            // Uses if-expressions to implement selection statement.
+            if (i == 0 ||
+                i == 1)
+            {
+                return true;
+            }
+            if (i == 2 ||
+                i == 3)
+            {
+                return false;
+            }
+            if (i == 4 ||
+                i == 5)
+            {
+                return true;
+            }
+            return false;
         }
 
-      
-
-        [Benchmark]
-        public void ListInsertion()
+        static bool IsValidSwitch(int i)
         {
-
-            mylist = new List<int>();
-            for (int i = 0; i < list.Count; i++)
+            // Implements a selection statement with a switch.
+            switch (i)
             {
-                mylist.Add(list[i]);
+                case 0:
+                case 1:
+                    return true;
+                case 2:
+                case 3:
+                    return false;
+                case 4:
+                case 5:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        const int _max = 100000000;
+        [Benchmark]
+        public void If()
+        {
+            bool b;
+            for (int i = 0; i < _max; i++)
+            {
+                b = IsValidIf(i);
             }
 
         }
-
-
-
         [Benchmark]
-        public void ArrayInsertion()
+        public void Switch()
         {
-            myArray = new int[list.Count];
-            for (int i = 0; i < list.Count; i++)
+            bool b;
+
+            for (int i = 0; i < _max; i++)
             {
-                myArray[i] = list[i];
-            }
-        }
-
-
-
-        [Benchmark]
-        public void DictionaryInsertion()
-        {
-            myDictionary = new Dictionary<int, int>();
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                myDictionary.Add(i, list[i]);
+                b = IsValidSwitch(i);
             }
         }
 
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -50,40 +50,45 @@ namespace benchmark
             list = RandomIntList(N);
         }
 
-        [Benchmark]
-        public void Foreach()
-        {
-            int total = 0;
-            foreach (int i in list)
-            {
-                total += i;
-            }
-
-        }
+      
 
         [Benchmark]
-        public void While()
+        public void ListInsertion()
         {
-            int total = 0;
-            int i=0;
-            while ( i < list.Count)
-            {
-                total += list[i++];
-            }
 
-        }
-
-
-        [Benchmark]
-        public void For()
-        {
-            int total = 0;
+            mylist = new List<int>();
             for (int i = 0; i < list.Count; i++)
             {
-                total += list[i];
+                mylist.Add(list[i]);
+            }
+
+        }
+
+
+
+        [Benchmark]
+        public void ArrayInsertion()
+        {
+            myArray = new int[list.Count];
+            for (int i = 0; i < list.Count; i++)
+            {
+                myArray[i] = list[i];
             }
         }
-        
-       
+
+
+
+        [Benchmark]
+        public void DictionaryInsertion()
+        {
+            myDictionary = new Dictionary<int, int>();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                myDictionary.Add(i, list[i]);
+            }
+        }
+
+
     }
 }

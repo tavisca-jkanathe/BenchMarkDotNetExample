@@ -6,6 +6,8 @@ using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace benchmark
 {
@@ -57,26 +59,23 @@ namespace benchmark
 
         const int _max = 100000000;
         [Benchmark]
-        public void StringConcatenation()
+        public void Task()
         {
-            String concatResult = "";
-            foreach (String value in hugeList)
+            for (int i = 0; i <N; ++i)
             {
-                concatResult += value;
+                Task task = new Task(() => { int a = 2,b=2,c; c = a + b; });
+                task.Start();
             }
+
 
         }
         [Benchmark]
-        public void StringBuiderConcatenation()
+        public void Thread()
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            String stringBuilderResult = "";
-            foreach (String s in hugeList)
+            for (int i = 0; i < N; ++i)
             {
-                stringBuilder.Append(s);
+                new Thread(() => { int a = 2, b = 2, c; c = a + b; }).Start();
             }
-
-            stringBuilderResult = stringBuilder.ToString();
         }
 
 
